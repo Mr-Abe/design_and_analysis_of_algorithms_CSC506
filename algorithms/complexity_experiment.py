@@ -17,7 +17,7 @@ def linear_sum(n):
     total = 0
 
     for value in range (1, n + 1): # range is exclusive, so we add 1 to n we could have used sum(range(1, n + 1))
-        total = value + total
+        total += value
 
     return total
 
@@ -27,7 +27,7 @@ def nested_sum(n):
 
     for value in range (1, n + 1):
         for value_2 in range (1, value):
-            total = value + value_2
+            total += value_2
 
     return total
 
@@ -40,25 +40,29 @@ def algorithm_time(func, n):
     return end_time - start_time
 
 
+def print_tabulated_data(title, data):
+    print(f"\n{title}:")
+    for key, value in data.items():
+        print(f"  n = {key:<8} => {value:.8f} seconds")
+
 def main():
+    # Number of test cases
+    n = int(input("How many different values of n would you like to test? "))
 
-    # gather the number of iterations to run
-    n = int(input("How many iterations would you like to run? "))
+    # Input values for n
+    values = [int(input(f"Enter value #{i + 1}: ")) for i in range(n)]
 
-    # gather the values to test for each iteration
+    linear_sum_times = {}
+    nested_sum_times = {}
 
-    linear_sum_time = algorithm_time(linear_sum, n)
-    nested_sum_time = algorithm_time(nested_sum, n)
+    # Collect timing data
+    for value in values:
+        linear_sum_times[value] = algorithm_time(linear_sum, value)
+        nested_sum_times[value] = algorithm_time(nested_sum, value)
 
-
-    start_time = time.time()
-    nested_sum(n)
-    end_time = time.time()
-    print(f"Nested sum took: {end_time - start_time:.8f} seconds")
-    start_time = time.time()
-    linear_sum(n)
-    end_time = time.time()
-    print(f"Linear sum took: {end_time - start_time:.8f} seconds")
+    # Print the timing comparison
+    print_tabulated_data("Linear Sum (O(n)) Times", linear_sum_times)
+    print_tabulated_data("Nested Sum (O(n²)) Times", nested_sum_times)
 
 
 if __name__ == "__main__":
